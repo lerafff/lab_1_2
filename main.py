@@ -1,3 +1,5 @@
+'''Lab_1_2'''
+
 from geopy.distance import geodesic
 import csv
 from geopy.geocoders import Nominatim
@@ -14,12 +16,14 @@ def input_user():
     parser.add_argument("year_of_films", help='The year of desired films')
     parser.add_argument("user_lattitude", help='Latitude of your position')
     parser.add_argument("user_longtitude", help="Longtitude of your position")
-    parser.add_argument("path_to_file", help="Path to the file to get information")
+    parser.add_argument("path_to_file",
+    help="Path to the file to get information")
     arguments = parser.parse_args()
     return arguments.year_of_films, arguments.user_lattitude, \
         arguments.user_longtitude, arguments.path_to_file
 
-def read_file(path_file: str, entered_year) -> list :
+
+def read_file(path_file: str, entered_year) -> list:
     '''
     The function reads file and works on it
 
@@ -40,7 +44,7 @@ USA'], ['#Hashtag Travel', 2017, 'Beacon, New York, USA'], \
     done_list = []
     list_of_countries = []
     with open(path_file, 'r') as r_file:
-        file_reader = csv.reader(r_file, delimiter = "\n")
+        file_reader = csv.reader(r_file, delimiter="\n")
         for line in file_reader:
             list_of_countries.append(line)
 
@@ -66,8 +70,8 @@ USA'], ['#Hashtag Travel', 2017, 'Beacon, New York, USA'], \
                 except IndexError:
                     continue
                 break
-        done_list.append(one_list)   
-    result = []     
+        done_list.append(one_list)
+    result = []
     for tupple in done_list:
         try:
             if entered_year == tupple[1]:
@@ -76,8 +80,6 @@ USA'], ['#Hashtag Travel', 2017, 'Beacon, New York, USA'], \
             continue
     return result
 
-# print(read_file('1.txt', 2017))
-
 
 def find_location(list_data):
     '''
@@ -85,17 +87,27 @@ def find_location(list_data):
 
     >>> find_location(read_file('1.txt', 2017))
     [[['#Hashtag Travel UK', 2017, 'England, UK'], \
-(52.5310214, -1.2649062)], [['#Hashtag Travel', 2017, 'Hudson Valley, \
-New York, USA'], (41.31611085, -74.12629189225156)], [['#Hashtag Travel', \
-2017, 'Cold Spring, New York, USA'], (41.4200938, -73.9545831)], [['#Hashtag Travel', \
-2017, 'Beacon, New York, USA'], (41.504879, -73.9696822)], [['#Hashtag Travel', \
-2017, 'Fishkill, New York, USA'], (41.5355745, -73.898702)], [['#Hashtag Travel', \
-2017, 'Wappingers Falls, New York, USA'], (41.5965635, -73.9112103)], [['#Hashtag \
-Travel', 2017, 'Poughkeepsie, New York, USA'], (41.7065539, -73.9283672)], \
-[['#MittelfingerspitzengefСЊhl', 2017, 'Germany'], (51.0834196, 10.4234469)], \
-[['#MittelfingerspitzengefСЊhl', 2017, 'The Netherlands'], \
-(52.24764975, 5.541246849406163)], [['#Murder', 2017, 'Knoxville, Tennessee, USA'], \
-(35.9603948, -83.9210261)], [['#VitalSignz', 2017, 'Toronto, Ontario, Canada'], \
+(52.5310214, -1.2649062)], [['#Hashtag Travel', \
+2017, 'Hudson Valley, New York, USA'], \
+(41.31611085, -74.12629189225156)], [['#Hashtag Travel', \
+2017, 'Cold Spring, New York, USA'], \
+(41.4200938, -73.9545831)], [['#Hashtag Travel', \
+2017, 'Beacon, New York, USA'], \
+(41.504879, -73.9696822)], [['#Hashtag Travel', \
+2017, 'Fishkill, New York, USA'], \
+(41.5355745, -73.898702)], [['#Hashtag Travel', \
+2017, 'Wappingers Falls, New York, USA'], \
+(41.5965635, -73.9112103)], [['#Hashtag \
+Travel', 2017, 'Poughkeepsie, New York, USA'], \
+(41.7065539, -73.9283672)], \
+[['#MittelfingerspitzengefСЊhl', \
+2017, 'Germany'], (51.0834196, 10.4234469)], \
+[['#MittelfingerspitzengefСЊhl', \
+2017, 'The Netherlands'], \
+(52.24764975, 5.541246849406163)], \
+[['#Murder', 2017, 'Knoxville, Tennessee, USA'], \
+(35.9603948, -83.9210261)], [['#VitalSignz', 2017, \
+'Toronto, Ontario, Canada'], \
 (43.6534817, -79.3839347)]]
     '''
     loc = []
@@ -103,7 +115,7 @@ Travel', 2017, 'Poughkeepsie, New York, USA'], (41.7065539, -73.9283672)], \
     for tupple in list_data:
         flag = True
         location = Nominatim(user_agent='app_name').geocode(tupple[-1])
-        if location != None:
+        if location is not None:
             info = [tupple, (location.latitude, location.longitude)]
             loc.append(info)
         else:
@@ -115,13 +127,13 @@ Travel', 2017, 'Poughkeepsie, New York, USA'], (41.7065539, -73.9283672)], \
                     indexx = tupple_0.find(',')
                     tupple_0 = tupple_0[(indexx + 2):]
                     location1 = Nominatim(user_agent='app_name').geocode(tupple_0)
-                    if location1 != None:
-                        info_1 = [tupple, (location1.latitude, location1.longitude)]
+                    if location1 is not None:
+                        info_1 = [tupple, (location1.latitude,
+                        location1.longitude)]
                         loc.append(info_1)
                         flag = False
     return loc
 
-# print(find_location(read_file('1.txt', 2017)))
 
 def find_distance(loc, lattitude, longtitude):
     '''
@@ -156,21 +168,20 @@ New York, USA'], (41.5355745, -73.898702)], 1327.7888502881879), \
         second_point = str(lattitude) + ',' + str(longtitude)
         distance = geodesic(first_point, second_point).kilometers
         all_together.append((elem, distance))
-    sorted_list1 = sorted(all_together, key=lambda x: x[1]) 
+    sorted_list1 = sorted(all_together, key=lambda x: x[1])
     return sorted_list1[:10]
 
-# print(find_distance(find_location(read_file('1.txt', 2017)), '50.000678', '-86.000977'))
 
 def mapp(list_with_all, lattitude, longtitude):
     """
     The function returns map with markers
 
     """
-    main_map = Map(location = [lattitude, longtitude], zoom_start = 3, control_scale = True)
+    main_map = Map(location=[lattitude, longtitude], zoom_start=3, control_scale=True)
 
     locations = [[elem[0][1][0], elem[0][1][1]] for elem in list_with_all]
-    markers = FeatureGroup(name = "Markers", show = False)
-    cluster = MarkerCluster(locations, name = 'Marker Cluster')
+    markers = FeatureGroup(name="Markers", show=False)
+    cluster = MarkerCluster(locations, name='Marker Cluster')
     main_map.add_child(markers)
     main_map.add_child(cluster)
 
@@ -178,11 +189,12 @@ def mapp(list_with_all, lattitude, longtitude):
         ttext = ''
         for text in elem[0][0]:
             ttext += str(text) + " "
-        i_frame = IFrame(ttext, width = 200, height = 125)
-        markers.add_child(Marker(location = [elem[0][1][0], elem[0][1][1]], popup = Popup(i_frame), icon = Icon(color = 'pink')))
+        i_frame = IFrame(ttext, width=200, height=125)
+        markers.add_child(Marker(location=[elem[0][1][0], elem[0][1][1]], popup=Popup(i_frame), icon=Icon(color='pink')))
 
     main_map.add_child(LayerControl())
     main_map.save('main_map.html')
+
 
 def main():
     '''
@@ -191,7 +203,8 @@ def main():
     year_film, lattitude_user, longtitude_user, path_file = input_user()
     list_with_info = read_file(path_file, int(year_film))
     info_plus_locations = find_location(list_with_info)
-    distance = find_distance(info_plus_locations, lattitude_user, longtitude_user)
+    distance = find_distance(info_plus_locations,
+    lattitude_user, longtitude_user)
     mapp(distance, lattitude_user, longtitude_user)
 
 main()
